@@ -1,39 +1,43 @@
 //Selecting DOM elements
-const taskInput = document.getElementById("task");
+const  AddBox = document.getElementById("Add-box");
 const taskList = document.getElementById("task-list");
 const searchInput = document.getElementById("search");
 
-//localStorage
-const loadTasks = () => JSON.parse(localStorage.getItem("tasks")) || [];
-const saveTasks = (tasks) => localStorage.setItem("tasks", JSON.stringify(tasks));
-
-let tasks = loadTasks();
-
-// Rendering tasks list
-const renderTasks = (filter = "") => {  
-    taskList.innerHTML = "";
-    const filteredTasks = tasks.filter((task) => task.toLowerCase().includes(filter.toLowerCase()));
-    filteredTasks.forEach((task, index) => {
-        const taskItem = document.createElement("li");
-        listItem.className = "task-item";
-
-        const textSpan = document.createElement("span");
-        textSpan.textContent = task.text;
-        textSpan.contentEditable = false;
 
 
-
-        taskItem.innerText = task;
-        taskList.appendChild(taskItem);
-    });
-function addTask() {
-  const task = inputBox.value;
-  if (task) {
-    const taskList = document.getElementById("task-list");
-    const taskItem = document.createElement("li");
-    taskItem.innerText = task;
-    taskList.appendChild(taskItem);
-    inputBox.value = "";
-  }
+function addTask(){
+    taskInput = document.getElementById("Add-box");
+    if(taskInput.value === ""){
+        alert("Please enter a task");
+    }
+    else{ 
+        let li = document.createElement("li");
+        li.innerHTML = taskInput.value;
+        taskList.appendChild(li);
+        let span = document.createElement("span");
+        span.innerHTML = "X";
+        li.appendChild(span);
+         
+    }
+    AddBox.value = "";
+    saveData();
 }
+
+taskList.addEventListener("click", function(e){
+    if(e.target.tagName === "LI"){
+        e.target.classList.toggle("checked");
+        saveData();
+    }
+    else if(e.target.tagName === "SPAN"){
+        e.target.parentElement.remove();
+        saveData();
+    }
+}, false);
+
+function saveData(){
+    localStorage.setItem("data", taskList.innerHTML);
 }
+function showTask(){
+    taskList.innerHTML = localStorage.getItem("data");
+}
+showTask();
